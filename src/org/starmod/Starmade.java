@@ -1,4 +1,4 @@
-package com.gravypod.starmade;
+package org.starmod;
 
 import java.net.InetSocketAddress;
 

@@ -1,4 +1,4 @@
-package com.gravypod.starmade;
+package org.starmod;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -9,9 +9,9 @@ import java.util.concurrent.Executors;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.gravypod.starmade.network.NetworkManager;
-import com.gravypod.starmadeapi.Server;
-import com.gravypod.starmadeapi.world.Universe;
+import org.starmod.api.Server;
+import org.starmod.api.world.Universe;
+import org.starmod.network.NetworkManager;
 
 public class StarmadeServer extends Server implements Runnable {
 	

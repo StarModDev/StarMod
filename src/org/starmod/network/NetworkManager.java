@@ -1,4 +1,4 @@
-package com.gravypod.starmade.network;
+package org.starmod.network;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -6,12 +6,12 @@ import java.io.IOException;
 import java.net.Socket;
 import java.util.logging.Level;
 
-import com.gravypod.starmadeapi.entity.Entity;
-import com.gravypod.starmadeapi.entity.Player;
-import com.gravypod.starmadeapi.network.StarmadePacket;
-import com.gravypod.starmadeapi.world.Universe;
+import org.starmod.api.entity.Entity;
+import org.starmod.api.entity.Player;
+import org.starmod.api.network.StarmadePacket;
+import org.starmod.api.world.Universe;
 
-public class NetworkManager extends com.gravypod.starmadeapi.network.NetworkManager {
+public class NetworkManager extends org.starmod.api.network.NetworkManager {
 	private DataInputStream input;
 	private DataOutputStream output;
 
