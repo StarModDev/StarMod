@@ -13,7 +13,7 @@ import org.starmod.api.Server;
 import org.starmod.api.world.Universe;
 import org.starmod.network.NetworkManager;
 
-public class StarmadeServer extends Server implements Runnable {
+public class StarmadeServer extends Server {
 	
 	private final ExecutorService executor = Executors.newCachedThreadPool();
 	private Universe universe;
@@ -24,9 +24,8 @@ public class StarmadeServer extends Server implements Runnable {
 		universe = new Universe(logger, maxPlayers);
 		this.address = address;
 	}
-	
-	@Override
-	public void run() {
+
+	public Runnable r = () -> {
 		ServerSocket listener;
 		try {
 			listener = new ServerSocket();
@@ -45,7 +44,6 @@ public class StarmadeServer extends Server implements Runnable {
 				executor.execute(new NetworkManager(socket, universe));
 			} catch (IOException e) {
 				logger.log(Level.SEVERE, "Error accepting socket.", e);
-				continue;
 			}
 			
 		}
@@ -54,7 +52,7 @@ public class StarmadeServer extends Server implements Runnable {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-	}
+	};
 	
 	@Override
 	public Universe getUniverse() {
