@@ -1,17 +1,15 @@
 package org.starmod;
 
-import java.io.IOException;
 import java.net.InetSocketAddress;
-import java.net.ServerSocket;
-import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.starmod.api.Server;
 import org.starmod.api.world.Universe;
-import org.starmod.network.NetworkManager;
+import org.starmod.net.NetworkServer;
 
 public class StarmadeServer extends Server {
 	
@@ -19,41 +17,25 @@ public class StarmadeServer extends Server {
 	private Universe universe;
 	private InetSocketAddress address;
 	private final Logger logger = Logger.getLogger("SM");
+	private NetworkServer networkServer;
+
+	private List<Player> players = new ArrayList<>();
 	
 	public StarmadeServer(int maxPlayers, InetSocketAddress address) {
 		universe = new Universe(logger, maxPlayers);
 		this.address = address;
+		this.networkServer = new NetworkServer(address.getPort());
+		this.networkServer.run();
 	}
 
-	public Runnable r = () -> {
-		ServerSocket listener;
-		try {
-			listener = new ServerSocket();
-		} catch (IOException e) {
-			logger.log(Level.SEVERE, "Error opening a socket.", e);
-			return;
-		}
-		try {
-			listener.bind(address);
-		} catch (IOException e1) {
-			e1.printStackTrace();
-		}
-		while (getUniverse().getRunning().get()) {
-			try {
-				Socket socket = listener.accept();
-				executor.execute(new NetworkManager(socket, universe));
-			} catch (IOException e) {
-				logger.log(Level.SEVERE, "Error accepting socket.", e);
-			}
-			
-		}
-		try {
-			listener.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	};
-	
+	public Player[] getPlayers() {
+		return (Player[]) players.toArray();
+	}
+
+	public void addPlayer(Player player) {
+		players.add(player);
+	}
+
 	@Override
 	public Universe getUniverse() {
 		return universe;
