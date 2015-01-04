@@ -32,6 +32,7 @@ public class CodecHandler extends MessageToMessageCodec<ByteBuf, Command> {
 	@Override
 	protected void decode(ChannelHandlerContext channelHandlerContext, ByteBuf buf, List<Object> out) throws Exception {
 		Header header = Header.decode(buf);
+		System.out.println("New Incoming Packet " + header.getPacketId() + " Command ID: " + header.getCommandId() + " Type: " + header.getCommandType()); // Debugging
 		final Codec codec = server.getCommandMap().getCodec(header.getCommandId());
 		Command cmd = codec.decode(buf, header);
 

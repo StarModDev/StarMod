@@ -15,10 +15,8 @@ public class ByteBufUtils {
 	 * @throws java.io.IOException If the reading fails
 	 */
 	public static String readUTF8(ByteBuf buf) throws IOException {
-		buf.skipBytes(1);
-		// Read the string's length
-		final int len = readVarInt(buf);
-		final byte[] bytes = new byte[len];
+		final int length = buf.readUnsignedShort();
+		final byte[] bytes = new byte[length];
 		buf.readBytes(bytes);
 		return new String(bytes, StandardCharsets.UTF_8);
 	}
@@ -35,55 +33,8 @@ public class ByteBufUtils {
 		if (bytes.length >= Short.MAX_VALUE) {
 			throw new IOException("Attempt to write a string with a length greater than Short.MAX_VALUE to ByteBuf!");
 		}
-		buf.writeByte(0);
-		// Write the string's length
-		writeVarInt(buf, bytes.length);
+		buf.writeShort(value.length());
 		buf.writeBytes(bytes);
-	}
-
-	/**
-	 * Reads an integer written into the byte buffer as one of various bit sizes.
-	 *
-	 * @param buf The byte buffer to read from
-	 * @return The read integer
-	 * @throws java.io.IOException If the reading fails
-	 */
-	public static int readVarInt(ByteBuf buf) throws IOException {
-		int out = 0;
-		int bytes = 0;
-		byte in;
-		while (true) {
-			in = buf.readByte();
-			out |= (in & 0x7F) << (bytes++ * 7);
-			if (bytes > 5) {
-				throw new IOException("Attempt to read int bigger than allowed for a varint!");
-			}
-			if ((in & 0x80) != 0x80) {
-				break;
-			}
-		}
-		return out;
-	}
-
-	/**
-	 * Writes an integer into the byte buffer using the least possible amount of bits.
-	 *
-	 * @param buf The byte buffer to write too
-	 * @param value The integer value to write
-	 */
-	public static void writeVarInt(ByteBuf buf, int value) {
-		int part;
-		while (true) {
-			part = value & 0x7F;
-			value >>>= 7;
-			if (value != 0) {
-				part |= 0x80;
-			}
-			buf.writeByte(part);
-			if (value == 0) {
-				break;
-			}
-		}
 	}
 
 }

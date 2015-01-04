@@ -8,22 +8,24 @@ public class Login implements Command {
 	private final Header header;
 	private final String playerName;
 	private final float version;
-	private final String uid;
+	private final String address;
 	private final String loginCode;
+	private final byte userAgent;
 	private int returnCode;
 	private int id;
 
-	public Login(Header header, String playerName, float version, String uid, String loginCode) {
-		this(header, playerName, version, uid, loginCode, 0, 0);
+	public Login(Header header, String playerName, float version, String uid, String loginCode, byte userAgent) {
+		this(header, playerName, version, uid, loginCode, 0, userAgent, 0);
 	}
 
-	public Login(Header header, String playerName, float version, String uid, String loginCode, int returnCode, int id) {
+	public Login(Header header, String playerName, float version, String address, String loginCode, int returnCode, byte userAgent, int id) {
 		this.header = header;
 		this.playerName = playerName;
 		this.version = version;
-		this.uid = uid;
+		this.address = address;
 		this.loginCode = loginCode;
 		this.returnCode = returnCode;
+		this.userAgent = userAgent;
 		this.id = id;
 	}
 
@@ -39,8 +41,8 @@ public class Login implements Command {
 		return version;
 	}
 
-	public String getUid() {
-		return uid;
+	public String getAddress() {
+		return address;
 	}
 
 	public String getLoginCode() {
@@ -49,6 +51,10 @@ public class Login implements Command {
 
 	public int getReturnCode() {
 		return returnCode;
+	}
+
+	public byte getUserAgent() {
+		return userAgent;
 	}
 
 	public int getId() {
@@ -66,9 +72,10 @@ public class Login implements Command {
 			"header=" + header +
 			", playerName='" + playerName + '\'' +
 			", version=" + version +
-			", uid='" + uid + '\'' +
+			", address='" + address + '\'' +
 			", loginCode='" + loginCode + '\'' +
 			", returnCode=" + returnCode +
+			", userAgent=" + userAgent +
 			", id=" + id +
 			'}';
 	}

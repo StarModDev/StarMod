@@ -29,7 +29,7 @@ public class LoginHandler implements Handler<Login> {
 		} else {
 		    System.out.println("[StarMod][Network][Login] Logging in Client " + client.getId() + " with protected username: " + playerName);
 		}
-		Login returnLogin = new Login(cmd.getHeader(), playerName, cmd.getVersion(), cmd.getUid(), cmd.getLoginCode(), returnCode, client.getId());
+		Login returnLogin = new Login(cmd.getHeader(), playerName, cmd.getVersion(), cmd.getAddress(), cmd.getLoginCode(), returnCode, cmd.getUserAgent(), client.getId());
 		client.send(returnLogin);
 		client.onLogin(cmd);
 	}

@@ -6,8 +6,11 @@ import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import org.starmod.ModServer;
+import org.starmod.net.command.MessageTo;
 import org.starmod.net.pipeline.PipelineChannelInitializer;
 
+import java.net.InetSocketAddress;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -16,29 +19,33 @@ public class NetworkServer implements Runnable {
 	private final ConcurrentMap<Client, Boolean> clients = new ConcurrentHashMap<>();
 	private final CommandMap commandMap;
 
-	private int port;
+	private ModServer server;
+	private InetSocketAddress address;
 
-	public NetworkServer(int port) {
-		this.port = port;
+	private final EventLoopGroup bossGroup = new NioEventLoopGroup();
+	private final EventLoopGroup workerGroup = new NioEventLoopGroup();
+
+	public NetworkServer(ModServer server, InetSocketAddress address) {
+		this.server = server;
+		this.address = address;
 		this.commandMap = new CommandMap();
 	}
 
 	@Override
 	public void run() {
-		EventLoopGroup bossGroup = new NioEventLoopGroup();
-		EventLoopGroup workerGroup = new NioEventLoopGroup();
+
 		ServerBootstrap b = new ServerBootstrap();
 		b.group(bossGroup, workerGroup)
 			.channel(NioServerSocketChannel.class)
 			.childHandler(new PipelineChannelInitializer(this))
 			.option(ChannelOption.TCP_NODELAY, true)
 			.option(ChannelOption.SO_KEEPALIVE, true);
-		b.bind(port);
-		System.out.println("[StarMod][Network] Network server is listening on port " + port);
+		b.bind(address);
+		System.out.println("[StarMod][Network] Network server is listening on port " + address.getPort());
 	}
 
 	public Client newClient(Channel channel) {
-		Client client = new Client(this, channel);
+		Client client = new Client(server, this, channel);
 		System.out.println("[StarMod][Network] Client created with ID " + client.getId());
 		clients.put(client, true);
 		return client;
@@ -48,8 +55,19 @@ public class NetworkServer implements Runnable {
 		clients.remove(client);
 	}
 
+	public void sendMessage(String message) {
+		for (Client client : clients.keySet()) {
+			client.send(new MessageTo("SERVER", message, 0));
+		}
+	}
+
 	public CommandMap getCommandMap() {
 		return commandMap;
+	}
+
+	public void shutdown() {
+		workerGroup.shutdownGracefully();
+		bossGroup.shutdownGracefully();
 	}
 
 }

@@ -1,15 +1,13 @@
 package org.starmod.net;
 
 import io.netty.channel.Channel;
-import org.starmod.Player;
-import org.starmod.StarmadeServer;
+import org.starmod.ModServer;
+import org.starmod.api.entity.OnlinePlayer;
+import org.starmod.entity.ModOnlinePlayer;
+import org.starmod.entity.meta.PlayerProfile;
 import org.starmod.net.command.Login;
 import org.starmod.net.command.Ping;
 import org.starmod.net.util.IDGenerator;
-import org.starmod.util.Vector3i;
-
-import javax.vecmath.Vector3f;
-import java.io.File;
 
 /**
 * Represents a client on the network server that has been registered
@@ -19,7 +17,7 @@ public class Client {
 	private int id;
 	private String name;
 	private NetworkServer networkServer;
-	private StarmadeServer server;
+	private ModServer server;
 	private Channel channel;
 	private boolean connected;
 
@@ -28,8 +26,9 @@ public class Client {
 	* @param networkServer the network server which handles the clients connection
 	* @param channel the channel the client communicates on
 	*/
-	public Client(NetworkServer networkServer, Channel channel) {
+	public Client(ModServer server, NetworkServer networkServer, Channel channel) {
 		this.id = IDGenerator.nextId();
+		this.server = server;
 		this.networkServer = networkServer;
 		this.channel = channel;
 		this.connected = channel.isActive();
@@ -55,7 +54,7 @@ public class Client {
 		return networkServer;
 	}
 
-	public StarmadeServer getServer() {
+	public ModServer getServer() {
 		return server;
 	}
 
@@ -84,7 +83,7 @@ public class Client {
 	}
 
 	public void onInboundThrowable(Throwable t) {
-		getChannel().close();
+		t.printStackTrace();
 	}
 
 	public void onOutboundThrowable(Throwable t) {
@@ -92,14 +91,9 @@ public class Client {
 
 	public void onLogin(Login cmd) {
 		name = cmd.getPlayerName();
-		Player player;
-		File playerFile = new File("./world/players/" + name + ".ent");
-		if (!playerFile.exists()) {
-			player = new Player(id, 25000, name, this, new Vector3f(0F, 0F, 0F), new Vector3i(2, 2, 2));
-		} else {
-			player = Player.load(this);
-		}
+		OnlinePlayer player = new ModOnlinePlayer(this, new PlayerProfile(name, cmd.getAddress()));
 		server.addPlayer(player);
+		server.sendServerMessage(player.getName() + " has joined the game.");
 	}
 
 	public void ping() {

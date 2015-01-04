@@ -8,7 +8,7 @@ public class PingHandler implements Handler<Ping> {
 
 	@Override
 	public void handle(Client client, Ping cmd) {
-
+		System.out.println("Pong from Client " + client.getId());
 	}
 
 }

@@ -1,14 +1,20 @@
 package org.starmod.net;
 
 import org.starmod.net.codec.LoginCodec;
+import org.starmod.net.codec.MessageToCodec;
 import org.starmod.net.codec.PingCodec;
-import org.starmod.net.codec.SynchronizeCodec;
+import org.starmod.net.codec.RequestGameModeCodec;
+import org.starmod.net.codec.sync.RequestSynchronizeAllCodec;
 import org.starmod.net.command.Login;
+import org.starmod.net.command.MessageTo;
 import org.starmod.net.command.Ping;
-import org.starmod.net.command.Synchronize;
+import org.starmod.net.command.RequestGameMode;
+import org.starmod.net.command.sync.RequestSynchronizeAll;
 import org.starmod.net.handler.LoginHandler;
+import org.starmod.net.handler.MessageToHandler;
 import org.starmod.net.handler.PingHandler;
-import org.starmod.net.handler.SynchronizeHandler;
+import org.starmod.net.handler.RequestGameModeHandler;
+import org.starmod.net.handler.sync.RequestSynchronizeAllHandler;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -46,7 +52,9 @@ public class CommandMap {
 
 	private void loadDefaultCommands() {
 		bind(0, Login.class, LoginCodec.class, LoginHandler.class);
-		bind(13, Synchronize.class, SynchronizeCodec.class, SynchronizeHandler.class);
+		bind(25, RequestSynchronizeAll.class, RequestSynchronizeAllCodec.class, RequestSynchronizeAllHandler.class);
+		bind(13, RequestGameMode.class, RequestGameModeCodec.class, RequestGameModeHandler.class);
+		bind(22, MessageTo.class, MessageToCodec.class, MessageToHandler.class);
 		bind(23, Ping.class, PingCodec.class, PingHandler.class);
 	}
 

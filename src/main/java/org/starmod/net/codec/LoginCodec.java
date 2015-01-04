@@ -15,9 +15,10 @@ public class LoginCodec implements Codec<Login> {
 		Object[] params = Parameters.decode(buf);
 		String playerName = (String) params[0];
 		float version = params.length > 1 ? ((float) params[1]) : 0.0F;
-		String uid = params.length > 2 ? ((String) params[2]) : "";
+		String address = params.length > 2 ? ((String) params[2]) : "";
 		String loginCode = params.length > 3 ? ((String) params[3]) : "";
-		return new Login(header, playerName, version, uid, loginCode);
+		byte userAgent = params.length > 4 ? ((Byte) params[4]) : 0;
+		return new Login(header, playerName, version, address, loginCode, userAgent);
 	}
 
 	@Override
