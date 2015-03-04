@@ -7,8 +7,8 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.starmod.api.Player;
 import org.starmod.api.Server;
+import org.starmod.api.entity.Player;
 import org.starmod.net.NetworkServer;
 import org.starmod.util.ServerConfig;
 
@@ -41,11 +41,12 @@ public class ModServer implements Server {
 
 	}
 
-	public Player[] getPlayers() {
-		return players.toArray(new Player[players.size()]);
-	}
+    @Override
+    public List<Player> getPlayers() {
+        return players;
+    }
 
-	public void addPlayer(Player player) {
+    public void addPlayer(Player player) {
 		players.add(player);
 	}
 

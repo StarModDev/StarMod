@@ -6,6 +6,7 @@ import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import org.starmod.ModClient;
 import org.starmod.ModServer;
 import org.starmod.net.command.MessageTo;
 import org.starmod.net.pipeline.PipelineChannelInitializer;
@@ -16,7 +17,7 @@ import java.util.concurrent.ConcurrentMap;
 
 public class NetworkServer implements Runnable {
 
-	private final ConcurrentMap<Client, Boolean> clients = new ConcurrentHashMap<>();
+	private final ConcurrentMap<ModClient, Boolean> clients = new ConcurrentHashMap<>();
 	private final CommandMap commandMap;
 
 	private ModServer server;
@@ -44,20 +45,20 @@ public class NetworkServer implements Runnable {
 		System.out.println("[StarMod][Network] Network server is listening on port " + address.getPort());
 	}
 
-	public Client newClient(Channel channel) {
-		Client client = new Client(server, this, channel);
-		System.out.println("[StarMod][Network] Client created with ID " + client.getId());
-		clients.put(client, true);
-		return client;
+	public ModClient newClient(Channel channel) {
+		ModClient modClient = new ModClient(server, this, channel);
+		System.out.println("[StarMod][Network] Client created with ID " + modClient.getNetworkId());
+		clients.put(modClient, true);
+		return modClient;
 	}
 
-	public void removeClient(Client client) {
-		clients.remove(client);
+	public void removeClient(ModClient modClient) {
+		clients.remove(modClient);
 	}
 
 	public void sendMessage(String message) {
-		for (Client client : clients.keySet()) {
-			client.send(new MessageTo("SERVER", message, 0));
+		for (ModClient modClient : clients.keySet()) {
+			modClient.send(new MessageTo("SERVER", message, 0));
 		}
 	}
 

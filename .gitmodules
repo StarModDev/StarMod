@@ -1,0 +1,3 @@
+[submodule "StarModAPI"]
+	path = StarModAPI
+	url = https://github.com/StarModDev/StarModAPI.git

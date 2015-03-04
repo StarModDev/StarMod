@@ -1,7 +1,9 @@
 package org.starmod.net;
 
+import org.starmod.ModClient;
+
 public interface Handler<C extends Command> {
 
-	public void handle(Client client, C cmd);
+	public void handle(ModClient modClient, C cmd);
 
 }

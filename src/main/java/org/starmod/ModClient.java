@@ -1,45 +1,54 @@
-package org.starmod.net;
+package org.starmod;
 
 import io.netty.channel.Channel;
-import org.starmod.ModServer;
-import org.starmod.api.entity.OnlinePlayer;
-import org.starmod.entity.ModOnlinePlayer;
-import org.starmod.entity.meta.PlayerProfile;
+import org.starmod.api.Client;
+import org.starmod.api.entity.Player;
+import org.starmod.net.Command;
+import org.starmod.net.Handler;
+import org.starmod.net.NetworkServer;
 import org.starmod.net.command.Login;
 import org.starmod.net.command.Ping;
 import org.starmod.net.util.IDGenerator;
 
+import java.util.UUID;
+
 /**
 * Represents a client on the network server that has been registered
 */
-public class Client {
+public class ModClient implements Client {
 
-	private int id;
+	private int networkId;
 	private String name;
 	private NetworkServer networkServer;
 	private ModServer server;
 	private Channel channel;
 	private boolean connected;
+    private int credits;
+    private final long firstPlayed;
+    private long lastOnline;
+    private int ping;
+    private Player player;
 
 	/**
 	* Constructs a registered client on the server which represents a connection
 	* @param networkServer the network server which handles the clients connection
 	* @param channel the channel the client communicates on
 	*/
-	public Client(ModServer server, NetworkServer networkServer, Channel channel) {
-		this.id = IDGenerator.nextId();
+	public ModClient(ModServer server, NetworkServer networkServer, Channel channel) {
+		this.networkId = IDGenerator.nextId();
 		this.server = server;
 		this.networkServer = networkServer;
 		this.channel = channel;
 		this.connected = channel.isActive();
+        this.firstPlayed = System.currentTimeMillis();
 	}
 
 	/**
-	* The unique id of this client
-	* @return a unique id
+	* The unique networkId of this client
+	* @return a unique networkId
 	*/
-	public int getId() {
-		return id;
+	public int getNetworkId() {
+		return networkId;
 	}
 
 	public String getName() {
@@ -74,11 +83,61 @@ public class Client {
 		return connected;
 	}
 
-	/**
+    @Override
+    public UUID getUniqueId() {
+        return null;
+    }
+
+    @Override
+    public int getCredits() {
+        return credits;
+    }
+
+    public void setCredits(int credits) {
+        this.credits = credits;
+    }
+
+    @Override
+    public long getFirstPlayed() {
+        return firstPlayed;
+    }
+
+    @Override
+    public long getLastOnline() {
+        return lastOnline;
+    }
+
+    public void setLastOnline(long lastOnline) {
+        this.lastOnline = lastOnline;
+    }
+
+    public int getPing() {
+        return ping;
+    }
+
+    public void setPing(int ping) {
+        this.ping = ping;
+    }
+
+    @Override
+    public boolean isOnline() {
+        return true;
+    }
+
+    @Override
+    public Player getPlayer() {
+        return player;
+    }
+
+    public void setPlayer(Player player) {
+        this.player = player;
+    }
+
+    /**
 	* Method that is called when the client disconnects
 	*/
 	public void onDisconnect() {
-		System.out.println("[StarMod][Network] Client " + id + " exited");
+		System.out.println("[StarMod][Network] Client " + networkId + " exited");
 		// TODO - handle the disconnect
 	}
 
@@ -90,10 +149,7 @@ public class Client {
 	}
 
 	public void onLogin(Login cmd) {
-		name = cmd.getPlayerName();
-		OnlinePlayer player = new ModOnlinePlayer(this, new PlayerProfile(name, cmd.getAddress()));
-		server.addPlayer(player);
-		server.sendServerMessage(player.getName() + " has joined the game.");
+		// TODO: Handler onLogin
 	}
 
 	public void ping() {
@@ -131,7 +187,7 @@ public class Client {
 	@Override
 	public String toString() {
 		return "Client{" +
-			"id=" + id +
+			"networkId=" + networkId +
 			'}';
 	}
 
