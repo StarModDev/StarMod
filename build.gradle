@@ -1,0 +1,17 @@
+apply plugin: 'java'
+
+group = 'org.starmod'
+version = '0.0.1'
+
+evaluationDependsOn('StarModAPI')
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testCompile 'junit:junit:4.11'
+
+    compile 'io.netty:netty-all:4.0.23.Final'
+    compile project('StarModAPI')
+}
