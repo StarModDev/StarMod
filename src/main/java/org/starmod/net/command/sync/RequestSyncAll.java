@@ -3,11 +3,11 @@ package org.starmod.net.command.sync;
 import org.starmod.net.Command;
 import org.starmod.net.Header;
 
-public class RequestSynchronizeAll implements Command {
+public class RequestSyncAll implements Command {
 
 	private Header header;
 
-	public RequestSynchronizeAll(Header header) {
+	public RequestSyncAll(Header header) {
 		this.header = header;
 	}
 

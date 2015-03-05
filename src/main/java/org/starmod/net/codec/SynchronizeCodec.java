@@ -3,8 +3,7 @@ package org.starmod.net.codec;
 import io.netty.buffer.ByteBuf;
 import org.starmod.net.Codec;
 import org.starmod.net.Header;
-import org.starmod.net.command.Synchronize;
-import org.starmod.net.util.Parameters;
+import org.starmod.net.command.sync.Synchronize;
 
 import java.io.IOException;
 
@@ -12,8 +11,7 @@ public class SynchronizeCodec implements Codec<Synchronize> {
 
 	@Override
 	public Synchronize decode(ByteBuf buf, Header header) throws IOException {
-		Object[] params = Parameters.decode(buf);
-		return new Synchronize(header, params);
+		return new Synchronize(header);
 	}
 
 	@Override

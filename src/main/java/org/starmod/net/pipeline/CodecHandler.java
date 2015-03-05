@@ -23,7 +23,6 @@ public class CodecHandler extends MessageToMessageCodec<ByteBuf, Command> {
 		ByteBuf cmdBuf = ctx.alloc().buffer();
 		cmdBuf = codec.encode(cmdBuf, cmd);
 
-		cmd.getHeader().setPacketSize(cmdBuf.readableBytes());
 		ByteBuf headerBuf = ctx.alloc().buffer(Header.SIZE);
 		headerBuf = cmd.getHeader().encode(headerBuf);
 		out.add(Unpooled.wrappedBuffer(headerBuf, cmdBuf));

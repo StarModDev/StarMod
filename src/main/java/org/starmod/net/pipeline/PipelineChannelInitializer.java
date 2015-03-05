@@ -14,10 +14,12 @@ public class PipelineChannelInitializer extends ChannelInitializer<SocketChannel
 
 	@Override
 	protected void initChannel(SocketChannel c) throws Exception {
+        FramingHandler framingHandler = new FramingHandler();
 		CodecHandler codecHandler = new CodecHandler(server);
 		CommandHandler commandHandler = new CommandHandler(server);
-		c.pipeline().addLast("codec", codecHandler)
-			    .addLast("handler", commandHandler);
+		c.pipeline().addLast("framing", framingHandler)
+                    .addLast("codec", codecHandler)
+			        .addLast("handler", commandHandler);
 	}
 
 }

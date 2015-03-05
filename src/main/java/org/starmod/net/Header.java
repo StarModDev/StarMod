@@ -11,57 +11,23 @@ public class Header {
 
 	public static final int SIZE = 5; // The size in bytes of a header
 
-	private int packetSize;
 	private final byte packetType;
 	private final short packetId;
 	private final byte commandId;
 	private final byte commandType;
 
 	/**
-	 * Constructs a header with a default size, used when command size is unknown.
+	 * Constructs a header with a specified size.
 	 * @param packetType the packet identification byte
 	 * @param packetId the unique packet id
 	 * @param commandId the command id associated with the header
 	 * @param commandType the type of command, stream or parametrized
 	 */
 	public Header(byte packetType, short packetId, byte commandId, byte commandType) {
-		this(SIZE, packetType, packetId, commandId, commandType);
-	}
-
-	/**
-	 * Constructs a header with a specified size.
-	 * @param packetSize the size of the packet not including the header size
-	 * @param packetType the packet identification byte
-	 * @param packetId the unique packet id
-	 * @param commandId the command id associated with the header
-	 * @param commandType the type of command, stream or parametrized
-	 */
-	public Header(int packetSize, byte packetType, short packetId, byte commandId, byte commandType) {
-		this.packetSize = packetSize;
 		this.packetType = packetType;
 		this.packetId = packetId;
 		this.commandId = commandId;
 		this.commandType = commandType;
-	}
-
-	/**
-	 * The the total size (in bytes) of the packet including the header size.
-	 * @return the size (in bytes) of the packet
-	 */
-	public int getPacketSize() {
-		return packetSize;
-	}
-
-	/**
-	 * Set the packet size if the unknown size constructor is used.
-	 * @param packetSize the size of the packet not including the header size
-	 */
-	public void setPacketSize(int packetSize) {
-		if (packetType != BYTE_PING) {
-			this.packetSize = packetSize + SIZE;
-		} else {
-			this.packetSize = packetSize + 1;
-		}
 	}
 
 	/**
@@ -103,8 +69,6 @@ public class Header {
 	 * @return the buffer after the header is written
 	 */
 	public ByteBuf encode(ByteBuf buf) {
-		if (packetSize <= 0) throw new IllegalArgumentException("Packet size is either invalid or not set!");
-		buf.writeInt(packetSize);
 		buf.writeLong(System.currentTimeMillis());
 		buf.writeByte(packetType);
 		if (packetType != Header.BYTE_PING) {
@@ -121,7 +85,6 @@ public class Header {
 	 * @return the newly create Header object
 	 */
 	public static Header decode(ByteBuf buf) {
-		int packetSize = buf.readInt();
 		byte packetType = buf.readByte();
 		short packetId;
 		byte commandId;
@@ -135,13 +98,12 @@ public class Header {
 			commandId = Header.BYTE_PING;
 			commandType = 0;
 		}
-		return new Header(packetSize, packetType, packetId, commandId, commandType);
+		return new Header(packetType, packetId, commandId, commandType);
 	}
 
 	@Override
 	public String toString() {
 		return "Header{" +
-			"packetSize=" + packetSize +
 			", packetType=" + packetType +
 			", packetId=" + packetId +
 			", commandId=" + commandId +

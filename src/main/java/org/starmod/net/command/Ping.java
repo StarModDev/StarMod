@@ -17,7 +17,7 @@ public class Ping implements Command {
 
 	@Override
 	public Header getHeader() {
-		return new Header(2, Header.BYTE_PING, (short) 0, Header.BYTE_PING, (byte) 0);
+		return new Header(Header.BYTE_PING, (short) 0, Header.BYTE_PING, (byte) 0);
 	}
 
 	@Override
