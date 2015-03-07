@@ -22,46 +22,19 @@
  * THE SOFTWARE.
  */
 
-package org.starmod.net.command.sync;
+package org.starmod.util;
 
-import io.netty.buffer.ByteBuf;
-import org.starmod.net.Command;
-import org.starmod.net.Header;
+import java.util.Map;
 
-public class Synchronize implements Command {
+public class MapUtils {
 
-    private Header header;
-    private ByteBuf buf;
-    private int[] ids;
-    private byte[] keys;
-
-    public Synchronize(Header header, ByteBuf buf, int[] ids, byte[] keys) {
-        this.header = header;
-        this.buf = buf;
-        this.ids = ids;
-        this.keys = keys;
-    }
-
-    @Override
-    public Header getHeader() {
-        return header;
-    }
-
-    public ByteBuf getBuf() {
-        return buf;
-    }
-
-    public int[] getIds() {
-        return ids;
-    }
-
-    public byte[] getKeys() {
-        return keys;
-    }
-
-    @Override
-    public boolean isAsync() {
-        return false;
+    public static <T, E> T getKeyByValue(Map<T, E> map, E value) {
+        for (Map.Entry<T, E> entry : map.entrySet()) {
+            if (value.equals(entry.getValue())) {
+                return entry.getKey();
+            }
+        }
+        return null;
     }
 
 }

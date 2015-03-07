@@ -81,6 +81,7 @@ public class ModEntity implements Entity {
         return target;
     }
 
+    @Override
     public void setTarget(Entity target) {
         this.target = target;
     }

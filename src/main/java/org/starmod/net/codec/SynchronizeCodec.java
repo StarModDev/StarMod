@@ -11,7 +11,23 @@ public class SynchronizeCodec implements Codec<Synchronize> {
 
 	@Override
 	public Synchronize decode(ByteBuf buf, Header header) throws IOException {
-		return new Synchronize(header);
+
+        int size = buf.readInt();
+
+        int[] ids = new int[size];
+        byte[] keys = new byte[size];
+
+        for (int i = 0; i < size; i++) {
+
+            int id = buf.readInt();
+            ids[i] = id;
+
+            byte key = buf.readByte();
+            keys[i] = key;
+
+        }
+
+        return new Synchronize(header, buf, ids, keys);
 	}
 
 	@Override

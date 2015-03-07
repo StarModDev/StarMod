@@ -109,7 +109,7 @@ public class NetworkObject {
         return netObj;
     }
 
-    public static void encode(ByteBuf buf, NetworkObject remote, boolean force) {
+    public static void encode(ByteBuf buf, NetworkObject remote, Sendable local, boolean force) {
 
         int size = 0;
         for (NetworkField field : remote.fields.values()) {
@@ -118,9 +118,9 @@ public class NetworkObject {
             }
         }
 
-        buf.writeInt(0); // TODO: Write id generator for network objects
+        buf.writeInt(remote.id.getValue());
 
-        buf.writeByte(0); // TODO: Write key generator
+        buf.writeByte(SendableRegistry.getKey(local.getClass()));
 
         buf.writeByte(size);
 

@@ -22,46 +22,14 @@
  * THE SOFTWARE.
  */
 
-package org.starmod.net.command.sync;
+package org.starmod.net.object;
 
-import io.netty.buffer.ByteBuf;
-import org.starmod.net.Command;
-import org.starmod.net.Header;
+public interface Sendable {
 
-public class Synchronize implements Command {
+    void initialize(NetworkObject netObj);
 
-    private Header header;
-    private ByteBuf buf;
-    private int[] ids;
-    private byte[] keys;
+    NetworkObject getNetworkObject();
 
-    public Synchronize(Header header, ByteBuf buf, int[] ids, byte[] keys) {
-        this.header = header;
-        this.buf = buf;
-        this.ids = ids;
-        this.keys = keys;
-    }
-
-    @Override
-    public Header getHeader() {
-        return header;
-    }
-
-    public ByteBuf getBuf() {
-        return buf;
-    }
-
-    public int[] getIds() {
-        return ids;
-    }
-
-    public byte[] getKeys() {
-        return keys;
-    }
-
-    @Override
-    public boolean isAsync() {
-        return false;
-    }
+    void update(NetworkObject netObj);
 
 }
