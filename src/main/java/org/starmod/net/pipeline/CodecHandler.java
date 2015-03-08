@@ -34,8 +34,7 @@ public class CodecHandler extends MessageToMessageCodec<ByteBuf, Command> {
 		System.out.println("New Incoming Packet " + header.getPacketId() + " Command ID: " + header.getCommandId() + " Type: " + header.getCommandType()); // Debugging
 		final Codec codec = server.getCommandMap().getCodec(header.getCommandId());
 		Command cmd = codec.decode(buf, header);
-
-		out.add(cmd);
+        out.add(cmd);
 	}
 
 }

@@ -15,7 +15,6 @@ public class RequestGameModeHandler implements Handler<RequestGameMode> {
 	public void handle(ModClient modClient, RequestGameMode cmd) {
 		modClient.ping();
 		cmd.setGameMode(modClient.getServer().getConfig().getString("gameMode"));
-		cmd.setSector(modClient.getServer().getConfig().getSector("startingSystem", "startingSector"));
 		try {
 			cmd.setConfigChecksum(FileUtil.getSha1Checksum(new File("data/config/BlockConfig.xml")));
 			cmd.setConfigPropertiesChecksum(FileUtil.getSha1Checksum(new File("data/config/BlockTypes.properties")));

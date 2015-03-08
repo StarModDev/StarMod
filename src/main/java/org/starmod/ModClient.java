@@ -7,7 +7,7 @@ import org.starmod.net.Command;
 import org.starmod.net.Handler;
 import org.starmod.net.NetworkServer;
 import org.starmod.net.command.Login;
-import org.starmod.net.command.Ping;
+import org.starmod.net.command.PingPong;
 import org.starmod.net.util.IDGenerator;
 
 import java.util.UUID;
@@ -153,11 +153,11 @@ public class ModClient implements Client {
 	}
 
 	public void ping() {
-		send(new Ping(true));
+		send(new PingPong(PingPong.PING));
 	}
 
 	public void pong() {
-		send(new Ping(false));
+		send(new PingPong(PingPong.PONG));
 	}
 
 	/**

@@ -42,7 +42,7 @@ public class NetworkServer implements Runnable {
 			.option(ChannelOption.TCP_NODELAY, true)
 			.option(ChannelOption.SO_KEEPALIVE, true);
 		b.bind(address);
-		System.out.println("[StarMod][Network] Network server is listening on port " + address.getPort());
+		System.out.println("[StarMod][Network] Network server started on " + address.getHostString() + ":" + address.getPort());
 	}
 
 	public ModClient newClient(Channel channel) {

@@ -1,16 +1,16 @@
 package org.starmod;
 
-import java.io.File;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.typesafe.config.Config;
+import com.typesafe.config.ConfigFactory;
 import org.starmod.api.Server;
 import org.starmod.api.entity.Player;
 import org.starmod.net.NetworkServer;
-import org.starmod.util.ServerConfig;
 
 public class ModServer implements Server {
 
@@ -19,26 +19,21 @@ public class ModServer implements Server {
 	}
 
 	private final NetworkServer networkServer;
-
 	private InetSocketAddress address;
-
-	private final ServerConfig config;
-
-	private List<Player> players = new ArrayList<>();
+    private final Config config;
+	private final List<Player> players = new ArrayList<>();
 	
 	public ModServer() {
-
-		this.config = new ServerConfig(new File("server.cfg"));
-
-		try {
-			this.address = new InetSocketAddress(InetAddress.getByName(config.getString("address")), config.getInt("port"));
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
-		}
-
-		this.networkServer = new NetworkServer(this, this.address);
+        this.config = ConfigFactory.load("server");
+        try {
+            String address = this.config.getString("address");
+            int port = this.config.getInt("port");
+            this.address = new InetSocketAddress(InetAddress.getByName(address), port);
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
+        this.networkServer = new NetworkServer(this, this.address);
 		this.networkServer.run();
-
 	}
 
     @Override
@@ -65,7 +60,8 @@ public class ModServer implements Server {
 		networkServer.shutdown();
 	}
 
-	public ServerConfig getConfig() {
-		return config;
+	public Config getConfig() {
+		return this.config;
 	}
+
 }
