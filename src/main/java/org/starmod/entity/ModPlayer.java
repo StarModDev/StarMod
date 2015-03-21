@@ -1,11 +1,13 @@
 package org.starmod.entity;
 
 import org.starmod.ModClient;
+import org.starmod.net.NetworkClient;
 import org.starmod.api.entity.Player;
 import org.starmod.api.world.Location;
 
 public class ModPlayer extends ModHuman implements Player {
 
+    private NetworkClient networkClient;
     private ModClient client;
     private Location spawnPoint;
     private boolean god;
@@ -22,7 +24,7 @@ public class ModPlayer extends ModHuman implements Player {
 
     @Override
     public int getPing() {
-        return client.getPing();
+        return networkClient.getPing();
     }
 
     @Override

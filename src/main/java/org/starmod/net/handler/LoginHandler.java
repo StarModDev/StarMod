@@ -1,13 +1,13 @@
 package org.starmod.net.handler;
 
-import org.starmod.ModClient;
 import org.starmod.net.Handler;
+import org.starmod.net.NetworkClient;
 import org.starmod.net.command.Login;
 
 public class LoginHandler implements Handler<Login> {
 
 	@Override
-	public void handle(ModClient modClient, Login cmd) {
+	public void handle(NetworkClient modClient, Login cmd) {
 		int returnCode;
 		String playerName = cmd.getPlayerName();
 		System.out.println("[StarMod][Network][Login] Client " + modClient.getNetworkId() + " attempting to login with username: " + playerName);

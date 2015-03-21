@@ -5,6 +5,7 @@ import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
@@ -39,6 +40,22 @@ public class ModServer implements Server {
     @Override
     public List<Player> getPlayers() {
         return players;
+    }
+
+    public Player getPlayer(String name) {
+        for (Player player : players) {
+            if (player.getName().equals(name))
+                return player;
+        }
+        return null;
+    }
+
+    public Player getPlayer(UUID uniqueId) {
+        for (Player player : players) {
+            if (player.getUniqueId().equals(uniqueId))
+                return player;
+        }
+        return null;
     }
 
     public void addPlayer(Player player) {

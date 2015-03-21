@@ -1,6 +1,6 @@
 package org.starmod.net.handler;
 
-import org.starmod.ModClient;
+import org.starmod.net.NetworkClient;
 import org.starmod.net.Handler;
 import org.starmod.net.command.RequestGameMode;
 import org.starmod.util.FileUtil;
@@ -12,7 +12,7 @@ import java.security.NoSuchAlgorithmException;
 public class RequestGameModeHandler implements Handler<RequestGameMode> {
 
 	@Override
-	public void handle(ModClient modClient, RequestGameMode cmd) {
+	public void handle(NetworkClient modClient, RequestGameMode cmd) {
 		modClient.ping();
 		cmd.setGameMode(modClient.getServer().getConfig().getString("gameMode"));
 		try {

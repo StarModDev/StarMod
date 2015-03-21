@@ -1,7 +1,7 @@
 package org.starmod.net.handler.sync;
 
 import io.netty.buffer.ByteBuf;
-import org.starmod.ModClient;
+import org.starmod.net.NetworkClient;
 import org.starmod.ServerRegistry;
 import org.starmod.net.Handler;
 import org.starmod.net.command.sync.Synchronize;
@@ -12,7 +12,7 @@ import org.starmod.net.object.SendableRegistry;
 public class SynchronizeHandler implements Handler<Synchronize> {
 
 	@Override
-	public void handle(ModClient modClient, Synchronize cmd) {
+	public void handle(NetworkClient modClient, Synchronize cmd) {
         for (int i = 0; i < cmd.getIds().length; i++) {
             int id = cmd.getIds()[i];
             if (ServerRegistry.containsLocal(id)) {
