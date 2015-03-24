@@ -24,7 +24,7 @@
 
 package org.starmod.entity;
 
-import org.starmod.api.entity.living.Living;
+import org.starmod.api.entity.Living;
 
 public class ModLiving extends ModEntity implements Living {
 

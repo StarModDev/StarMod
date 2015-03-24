@@ -1,16 +1,24 @@
 package org.starmod.entity;
 
+import com.flowpowered.nbt.CompoundTag;
 import org.starmod.ModClient;
+import org.starmod.api.item.inventory.Inventory;
 import org.starmod.net.NetworkClient;
 import org.starmod.api.entity.Player;
 import org.starmod.api.world.Location;
 
-public class ModPlayer extends ModHuman implements Player {
+public class ModPlayer extends ModLiving implements Player {
 
     private NetworkClient networkClient;
     private ModClient client;
     private Location spawnPoint;
+    private Inventory inventory;
     private boolean god;
+
+    @Override
+    public int getId() {
+        return networkClient.getNetworkId();
+    }
 
     @Override
     public Location getSpawnPoint() {
@@ -58,8 +66,23 @@ public class ModPlayer extends ModHuman implements Player {
     }
 
     @Override
+    public Inventory getInventory() {
+        return inventory;
+    }
+
+    @Override
     public Player getPlayer() {
         return this;
+    }
+
+    @Override
+    public void save(CompoundTag tag) {
+
+    }
+
+    @Override
+    public void load(CompoundTag tag) {
+
     }
 
 }

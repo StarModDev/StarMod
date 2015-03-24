@@ -21,9 +21,9 @@ public class RequestGameModeCodec implements Codec<RequestGameMode> {
 		Object[] params = new Object[13];
 		params[0] = cmd.getGameMode();
 		params[1] = 2;
-		params[2] = cmd.getSector().getX();
-		params[3] = cmd.getSector().getY();
-		params[4] = cmd.getSector().getZ();
+		params[2] = cmd.getSector().getLocation().getX();
+		params[3] = cmd.getSector().getLocation().getY();
+		params[4] = cmd.getSector().getLocation().getZ();
 		params[5] = cmd.getConfigChecksum();
 		params[6] = cmd.getConfigPropertiesChecksum();
 		params[7] = cmd.isAsteroidsDynamicPhysics();

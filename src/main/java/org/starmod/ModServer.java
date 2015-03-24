@@ -50,14 +50,6 @@ public class ModServer implements Server {
         return null;
     }
 
-    public Player getPlayer(UUID uniqueId) {
-        for (Player player : players) {
-            if (player.getUniqueId().equals(uniqueId))
-                return player;
-        }
-        return null;
-    }
-
     public void addPlayer(Player player) {
 		players.add(player);
 	}

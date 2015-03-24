@@ -28,23 +28,12 @@ import com.flowpowered.math.vector.Vector3f;
 import org.starmod.api.entity.Entity;
 import org.starmod.api.world.Location;
 
-import java.util.UUID;
-
 public class ModEntity implements Entity {
 
-    private UUID uniqueId;
     private String name;
     private Location location;
     private Vector3f rotation;
     private Entity target;
-
-    public UUID getUniqueId() {
-        return uniqueId;
-    }
-
-    public void setUniqueId(UUID uniqueId) {
-        this.uniqueId = uniqueId;
-    }
 
     @Override
     public String getName() {
